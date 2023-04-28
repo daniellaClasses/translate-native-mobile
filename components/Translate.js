@@ -2,15 +2,19 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import tw from 'twrnc';
-const Translate = ({ text, language }) => {
+import { StarIcon } from 'react-native-heroicons/outline';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const Translate = ({ text, language }) => {
   const [translated, setTranslated] = useState('');
 
-  //   useEffect(() => {
-  //     useTranslation(text, language);
-  //   }, [text, language]);
+
+  //sale error, pero es necesario para que funcione...
+  useEffect(() => {
+    useTranslation(text, language);
+  }, [text, language]);
 
   const useTranslation = (text, language) => {
     const data = {
@@ -28,8 +32,11 @@ const Translate = ({ text, language }) => {
           },
         )
           .then(data => data.json())
-          .then(transl => setTranslated(transl.data.translations[0].translatedText));
-        console.log('Hago una traducción');
+          .then(t => {
+            console.log(t.data.translations[0].translatedText)
+            setTranslated(t.data.translations[0].translatedText)
+          }
+          );
       } catch (err) {
         console.log(err);
       }
@@ -38,7 +45,7 @@ const Translate = ({ text, language }) => {
     return translation();
   };
 
-  // Utility FN · Mover a carpeta utils/utils.js
+  // Este tipo de funcione suele ir en utils
   const debounce = fn => {
     let id = null;
 
@@ -53,17 +60,28 @@ const Translate = ({ text, language }) => {
     };
   };
 
+  const saveTranslation = async (text, translated) => {
+    console.log('Data', text, translated);
+    try {
+      await AsyncStorage.setItem(`@translation-${text}`, translated);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <View style={tw`mt-8 px-8 w-full `}>
       <Text style={tw`mb-2`}>Your translation</Text>
-      <View style={tw`bg-slate-100/60 rounded-md w-full min-h-30`}>
-        <Text>
-          {console.log(translated)}
-          {translated}
-          {console.log('Hola, llego aquí', translated)}
-          </Text>
-      </View>
+      <View style={tw`relative bg-slate-100/60 rounded-md w-full min-h-30 px-4`}>
+        <Pressable onPress={() => {
+          // console.log('data', text, translated)
+          saveTranslation(text, translated)}}
+        style={tw`absolute top-2 right-2 z-10`}>
+        <StarIcon color={tw.color('violet-400')} size={24} />
+      </Pressable>
+      <Text>{translated}</Text>
     </View>
+    </View >
   );
 };
 

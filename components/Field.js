@@ -19,9 +19,9 @@ const Field = ({onValueChange}) => {
         textAlignVertical="top"
         value={text}
         onChangeText={textInput => {
+          console.log('TEXT 1', textInput, 'TEXT 2', text);
           setText(textInput);
           onValueChange(textInput);
-          console.log('TEXT 1', textInput, 'TEXT 2', text);
         }}
       />
     </View>

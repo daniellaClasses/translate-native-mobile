@@ -18,7 +18,7 @@ import {
 
 
 import LanguageSelector from '../components/LanguageSelector';
-import Field from '../components/Fields';
+import Field from '../components/Field';
 import Translate from '../components/Translate';
 
 const Home = ( {navigation} ) => {
@@ -48,7 +48,6 @@ const Home = ( {navigation} ) => {
                             </Pressable>
                         </View>
                         {/* Language Selector */}
-                        <Button title="Go to details" onPress={() => navigation.navigate('Details')}/>
                         <LanguageSelector language={language} setLanguage={setLanguage} />
                         <Field onValueChange={setText} />
                         <Translate text={text} language={language}/>
