@@ -1,42 +1,85 @@
-import React, {useState} from 'react';
-import tw from 'twrnc';
-import {
-  Alert,
-  Keyboard,
-  Pressable,
-  SafeAreaView, // Solo para iOs
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable prettier/prettier */
+// import type { Node } from 'react';
 
-import LanguageSelector from './components/LanguageSelector';
-import Field from './components/Fields';
+
+import { useEffect, useState } from 'react';
+import { Button, Pressable, Text, View } from 'react';
+import { Image } from 'react-native';
+import tw from 'twrnc';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+
+import Home from './screens/Home';
+
+
+const Saved = () => {
+  return (
+    <View style={tw`flex flex-1 items-center justify-center`}>
+      <Text> Saved </Text>
+    </View>
+  );
+};
+
+// const Logo = () => {
+//   return <Image source={"./public/images"}
+//     style={tw`w-[139px] h-[139px]`} />;
+// }
+
+
+const DetailsScreen = ({ route, navigation }) => {
+  // console.log(route.params);
+  return (
+    <View style={tw`flex flex-1 items-center justify-center`}>
+      <Text> Details Screen</Text>
+      <Text> {route.params?.description} </Text>
+      <Button title="Profile" onPress={() => navigation.navigate('Profile', { info: 'Otra info' })} />
+      <Button title="Volver" onPress={() => navigation.goBack()} />
+    </View>
+  );
+};
+
+const ProfileScreen = ({ route, navigation }) => {
+  const { id, info } = route.params;
+  const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    setDescription('Otra descripción');
+  }, []);
+
+  return (
+    <View style={tw`flex flex-1 items-center justify-center`}>
+      <Text> Profile Screen</Text>
+      <Text> {id}</Text>
+      <Text> {info}</Text>
+      <Button title="Go Home" onPress={() => navigation.popToTop()} //por cuestión de perfomance, quita todas las que se han acumulado y vuelve al Home
+      />
+      <Button title="Go to details" onPress={() => navigation.navigate('Details', { params: { desc: description } })} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </View>
+  );
+};
+
+
+const Tab = createBottomTabNavigator();
 
 function App() {
-  const [language, setLanguage] = useState('es');
-  const profileToast = () => {
-    Alert.alert('Hola Mundo', 'Estamos en la Tierra.', [
-      {text: 'Cancelar', style: 'cancel'},
-      {text: 'Ok', onPress: () => console.log('Vale!')},
-    ]);
-  };
+  // function App: () => Node = () => {
   return (
-    <SafeAreaView style={tw`flex flex-1`}>
-      {/* Cabecera */}
-      <View style={tw`px-8 py-4 flex flex-row items-center justify-between`}>
-        <Text style={tw`text-2xl`}>Translate App</Text>
-        <Pressable
-          style={tw`rounded-full w-12 h-12 bg-slate-100 flex items-center justify-center`}
-          onPress={profileToast}>
-          <Text style={tw`text-slate-800  font-bold`}>ER</Text>
-        </Pressable>
-      </View>
-      {/* Language Selector */}
-      <LanguageSelector language={language} />
-
-      <Field />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: false,
+          }} />
+        <Tab.Screen
+          name="Saved"
+          component={Saved} />
+      </Tab.Navigator>
+    </NavigationContainer >
   );
 }
 

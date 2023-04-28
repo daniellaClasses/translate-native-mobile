@@ -1,4 +1,5 @@
 package com.translatemobile;
+import android.os.Bundle; //añadido el 27-04
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -14,6 +15,12 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "translateMobile";
+  }
+
+// Nuevo creado el 27-04
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
   }
 
   /**

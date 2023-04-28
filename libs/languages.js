@@ -3,6 +3,7 @@ const LANGUAGES = [
   {label: 'Afrikaans', value: 'af'},
   {label: 'Arabic', value: 'ar'},
   {label: 'French', value: 'fr'},
+  {label: 'Italian', value: 'it'},
   {label: 'Hindi', value: 'hi'},
   {label: 'Japanese', value: 'ja'},
   {label: 'Portuguese', value: 'pt'},
